@@ -6,6 +6,7 @@ class Monitors extends React.Component {
         super(props);
 
         this.deleteMonitor = this.deleteMonitor.bind(this);
+        this.updateMonitorPort = this.updateMonitorPort.bind(this);
     }
 
     
@@ -15,13 +16,19 @@ class Monitors extends React.Component {
         }
         return (
             this.props.monitors.map((e, i) => 
-                <Monitor data={e} key={i} index={i} deleteCallback={this.deleteMonitor}/>
+                <Monitor data={e} key={i} 
+                deleteCallback={this.deleteMonitor}
+                updateMonitorPortCallback={this.updateMonitorPort}/>
             )
         );
     }
     
-    deleteMonitor(index) {
-        this.props.deleteCallback(index);
+    deleteMonitor(id) {
+        this.props.deleteCallback(id);
+    }
+
+    updateMonitorPort(id, port) {
+        this.props.updateMonitorPortCallback(id, port);
     }
 }
 

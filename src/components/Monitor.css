@@ -6,6 +6,8 @@
   }
 
   .Card-Background{
+    flex-direction: row;
+    flex-wrap: nowrap;
     background-color: white;
     padding: 5%;
     margin: 2.5%;
@@ -15,15 +17,15 @@
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.5s;
     border-radius: 5px;
-    justify-items: center;
-    text-align: center;
+    justify-items: flex-start;
   }
 
   .Monitor-Text{
-    font-size: calc(24px + 0.5vw);
+    font-size: calc(10px + 0.5vw);
     text-align: center;
     color: lightgray;
     user-select: none;
+    max-width: 50%;
   }
 
   .Exit{
@@ -36,3 +38,8 @@
     color: lightgray;
     user-select: none;
   }
+
+.Video-Window{
+  max-width:40%;
+
+}

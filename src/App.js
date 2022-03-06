@@ -5,21 +5,32 @@ import './App.css';
 
 class App extends React.Component {
   
-  constructor(props) {
+  constructor (props) {
     super(props);
-    this.state = {click: true, monitors: [{
-      port: 8080,
-      metric: 'packet-size'
-    }]};
 
     this.onClickAddButton = this.onClickAddButton.bind(this);
-    this.monitorsCallback = this.monitorsCallback.bind(this);
+    this.monitorsDeleteCallback = this.monitorsDeleteCallback.bind(this);
+    this.monitorsPortCallback = this.monitorsPortCallback.bind(this);
+
+    this.idSet = new Set();
+
+    const id = this.generateId();
+
+    this.idSet.add(id);
+
+    this.state = {monitors: [{
+      port: 8080,
+      metric: 'packet-size',
+      id: id,
+    }]};
   }
 
   render () {
     return (
       <div className="App">
-        <Monitors monitors={this.state.monitors} deleteCallback={this.monitorsCallback}/>
+        <Monitors monitors={this.state.monitors} 
+          deleteCallback={this.monitorsDeleteCallback}
+          updateMonitorPortCallback={this.monitorsPortCallback}/>
         <div className="Add-Button-Card" 
             onClick={this.onClickAddButton}>
           <div className="Add-Button-Plus">+</ div>
@@ -28,18 +39,50 @@ class App extends React.Component {
     );
   }
 
-  onClickAddButton() {
-    this.setState({click: !this.state.click});
+  onClickAddButton () {
+    let id = this.generateId();
+
+    while(this.idSet.has(id)){
+      id = this.generateId();
+    }
+
+    this.idSet.add(id);
+
     this.state.monitors.push({
       port: 8080,
-      metric: 'packet-size'
+      metric: 'packet-size',
+      id: id,
     });
     this.setState({monitors: this.state.monitors});
   }
 
-  monitorsCallback(index) {
-    this.state.monitors.splice(index, 1);
-    this.setState({monitors: this.state.monitors});
+  monitorsDeleteCallback (id) {
+
+    this.idSet.delete(id);
+
+    const monitor = this.state.monitors.filter(monitor => monitor.id !== id);
+
+    this.setState({monitors: monitor});
+  }
+
+  monitorsPortCallback(id, port){
+    const monitor = this.state.monitors.map((e) => {
+      if(e.id === id) {
+        e.port = port;
+      } 
+      return e;
+    });
+
+    this.setState({monitors: monitor});
+  }
+
+  generateId () { //Generate a random 8 char hex string for id. Should *rarely* be regenerated
+    let randChar = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'];
+    let id = '';
+    for(let i = 0; i < 8; i++) {
+      id += randChar[Math.floor(Math.random() * randChar.length)]
+    }
+    return id;
   }
 
 }
