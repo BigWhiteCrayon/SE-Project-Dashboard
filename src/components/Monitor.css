@@ -1,0 +1,38 @@
+.Card{
+    position: relative;
+    width:95%;
+    margin: 2.5%;
+    margin-bottom: 0%;
+  }
+
+  .Card-Background{
+    background-color: white;
+    padding: 5%;
+    margin: 2.5%;
+    margin-top: 0%;
+    margin-bottom: 0%;
+    width: 85%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.5s;
+    border-radius: 5px;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .Monitor-Text{
+    font-size: calc(24px + 0.5vw);
+    text-align: center;
+    color: lightgray;
+    user-select: none;
+  }
+
+  .Exit{
+    position: absolute;   
+    font-size: calc(12px + 0.5vw);
+    margin-right: 3%;
+    right:5px;
+    top: 5px;
+    text-align: center;
+    color: lightgray;
+    user-select: none;
+  }
