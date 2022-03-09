@@ -1,47 +1,59 @@
-import React from 'react'
+import React from 'react';
 import VideoPlayer from './VideoPlayer';
+import MetricsGraph from './MetricsGraph';
 import './Monitor.css'
 
 class Monitor extends React.Component {
 
-    metrics = ['packet-size'];
+    metrics = [{name: 'packetSize', display: 'Packet Size'}, 
+                {name: 'dataTransferRate', display: 'Data Transfer Rate'}];
+
+    lineColor = {
+                    packetSize: 'aqua',
+                    dataTransferRate: 'red'
+                }
 
     constructor(props) {
         super(props);
 
-        this.state = {portValue: this.props.data.port};
+        this.state = {portValue: this.props.data.port, metric: this.metrics[0].name};
 
         this.onClickExit = this.onClickExit.bind(this);
         this.onPortChange = this.onPortChange.bind(this);
         this.handlePortChange = this.handlePortChange.bind(this);
+        this.handleMetricChange = this.handleMetricChange.bind(this);
     }
 
     render() {
+        const data = [{name: 'a', packetSize: 65, dataTransferRate: 34, time: -20}, {name: 'b',packetSize:55, dataTransferRate: 36,time: -15}, 
+            {name: 'c', packetSize:56, dataTransferRate: 27, time: -10}, {name: 'd', packetSize: 67, dataTransferRate: 40, time: -5}, 
+            {name: 'e', packetSize: 60, dataTransferRate: 35,time: 0}];
         return (
             <div className='Card'>
                 <div className='Exit' onClick={this.onClickExit}>x</div>
                 <div className='Card-Background'>
                     <VideoPlayer port={this.props.data.port} />
-                    <div>
+                    <div style={{flex: 3}}>
+                        <MetricsGraph data={data} dataKey={this.state.metric} 
+                        xAxisKey={'time'} lineColor={this.lineColor[this.state.metric]}/>
+                    </ div>
+                    <div style={{flex: 2, paddingLeft: '5%'}}>
                         <label>
                         Port: 
                             <input type='text' value={this.state.portValue}
                             onChange={this.handlePortChange} />
                             <button onClick={this.onPortChange}>Submit</ button>
-                        </ label>
-                        {/*<label>
+                        </ label><br />
+                        <label>
                         Metric : 
+                            <select value={this.state.metric} onChange={this.handleMetricChange}>
                             {this.metrics.map((e, i) => 
-                                    <div>
-                                        <input type="radio" id={e} key={i} value={e} />
-                                        <label for={e}>{e}</ label>
-                                    </ div>
+                                    <option value={e.name} key={i}>{e.display}</option>
                                 )
                             }
-                            <button onClick={this.onMetricChange}>Submit</ button>
-                        </ label>*/}
+                            </select>
+                        </ label>
                     </div>
-                    {/*<p className='Monitor-Text'>Dummy Monitor #{this.props.data.id}</p>*/}
                 </div>
                 
             </div>
@@ -60,8 +72,8 @@ class Monitor extends React.Component {
         this.setState({portValue: event.target.value});
     }
 
-    onMetricChange() {
-
+    handleMetricChange(event) {
+        this.setState({metric: event.target.value});
     }
 }
 

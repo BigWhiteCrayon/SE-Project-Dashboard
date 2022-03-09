@@ -5,9 +5,11 @@ class VideoPlayer extends React.Component {
 
     render () {
         return(
-            <video muted autoPlay className='Video-Window' loop
-                src={`http://localhost:${this.props.port}/video`} type="video/mp4" 
-            />    
+            <div className='Video-Window' >
+                <video className='Video' muted autoPlay loop
+                    src={`http://localhost:${this.props.port}/video`} type="video/mp4" 
+                />    
+            </div>
         );
     }
 }

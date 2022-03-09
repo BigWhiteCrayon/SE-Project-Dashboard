@@ -6,6 +6,7 @@
   }
 
   .Card-Background{
+    display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     background-color: white;
@@ -40,6 +41,14 @@
   }
 
 .Video-Window{
-  max-width:40%;
+  flex: 3;
+}
 
+.Video{
+  max-width:100%;
+}
+
+.Line-Chart{
+  width: 400;
+  height: 400;
 }
