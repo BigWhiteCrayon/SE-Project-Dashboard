@@ -11,12 +11,20 @@ class Monitor extends React.Component {
     lineColor = {
                     packetSize: 'aqua',
                     dataTransferRate: 'red'
-                }
+                };
+
+    streams = [{name: 'Stream 1', port: 8080},
+                {name: 'Stream 2', port: 8081},
+                {name: 'Stream 3', port: 8082},
+                {name: 'Stream 4', port: 8083},
+                {name: 'Stream 5', port: 8084},
+                {name: 'Stream 6', port: 8085},
+                {name: 'Stream 7', port: 8086}];
 
     constructor(props) {
         super(props);
 
-        this.state = {portValue: this.props.data.port, metric: this.metrics[0].name};
+        this.state = {portValue: this.props.data.streams, metric: this.metrics[0].name};
 
         this.onClickExit = this.onClickExit.bind(this);
         this.onPortChange = this.onPortChange.bind(this);
@@ -39,13 +47,19 @@ class Monitor extends React.Component {
                     </ div>
                     <div style={{flex: 2, paddingLeft: '5%'}}>
                         <label>
-                        Port: 
-                            <input type='text' value={this.state.portValue}
+                        Stream: 
+                            {/*<input type='text' value={this.state.portValue}
                             onChange={this.handlePortChange} />
-                            <button onClick={this.onPortChange}>Submit</ button>
+                            <button onClick={this.onPortChange}>Submit</ button>*/}
+                            <select value={this.state.portValue} onChange={this.handlePortChange}>
+                            {this.streams.map((e, i) => 
+                                    <option value={e.port} key={i}>{e.name}</option>
+                                )
+                            }
+                            </ select>
                         </ label><br />
                         <label>
-                        Metric : 
+                        Metric: 
                             <select value={this.state.metric} onChange={this.handleMetricChange}>
                             {this.metrics.map((e, i) => 
                                     <option value={e.name} key={i}>{e.display}</option>
@@ -70,6 +84,7 @@ class Monitor extends React.Component {
 
     handlePortChange(event) {
         this.setState({portValue: event.target.value});
+        this.props.updateMonitorPortCallback(this.props.data.id, event.target.value);
     }
 
     handleMetricChange(event) {
