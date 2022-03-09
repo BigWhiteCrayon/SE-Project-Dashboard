@@ -2,7 +2,6 @@ import React from 'react';
 import Monitors from './components/Monitors';
 import './App.css';
 
-
 class App extends React.Component {
   
   constructor (props) {
@@ -19,7 +18,7 @@ class App extends React.Component {
     this.idSet.add(id);
 
     this.state = {monitors: [{
-      port: 8080,
+      url: process.env.REACT_APP_SOURCE_1_URL,
       metric: 'packet-size',
       id: id,
     }]};
@@ -49,7 +48,7 @@ class App extends React.Component {
     this.idSet.add(id);
 
     this.state.monitors.push({
-      port: 8080,
+      url: process.env.REACT_APP_SOURCE_1_URL,
       metric: 'packet-size',
       id: id,
     });
@@ -65,10 +64,10 @@ class App extends React.Component {
     this.setState({monitors: monitor});
   }
 
-  monitorsPortCallback(id, port){
+  monitorsPortCallback(id, url){
     const monitor = this.state.monitors.map((e) => {
       if(e.id === id) {
-        e.port = port;
+        e.url = url;
       } 
       return e;
     });

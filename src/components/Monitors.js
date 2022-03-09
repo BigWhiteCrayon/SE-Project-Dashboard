@@ -27,8 +27,8 @@ class Monitors extends React.Component {
         this.props.deleteCallback(id);
     }
 
-    updateMonitorPort(id, port) {
-        this.props.updateMonitorPortCallback(id, port);
+    updateMonitorPort(id, url) {
+        this.props.updateMonitorPortCallback(id, url);
     }
 }
 

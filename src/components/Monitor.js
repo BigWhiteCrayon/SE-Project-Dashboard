@@ -1,7 +1,7 @@
 import React from 'react';
 import VideoPlayer from './VideoPlayer';
 import MetricsGraph from './MetricsGraph';
-import './Monitor.css'
+import './Monitor.css';
 
 class Monitor extends React.Component {
 
@@ -13,18 +13,20 @@ class Monitor extends React.Component {
                     dataTransferRate: 'red'
                 };
 
-    streams = [{name: 'Stream 1', port: 8080},
-                {name: 'Stream 2', port: 8081},
-                {name: 'Stream 3', port: 8082},
-                {name: 'Stream 4', port: 8083},
-                {name: 'Stream 5', port: 8084},
-                {name: 'Stream 6', port: 8085},
-                {name: 'Stream 7', port: 8086}];
+    streams = [ {name: 'Stream 1', url: process.env.REACT_APP_SOURCE_1_URL},
+                {name: 'Stream 2', url: process.env.REACT_APP_SOURCE_2_URL},
+                {name: 'Stream 3', url: process.env.REACT_APP_SOURCE_3_URL},
+                {name: 'Stream 4', url: process.env.REACT_APP_SOURCE_4_URL},
+                {name: 'Stream 5', url: process.env.REACT_APP_SOURCE_5_URL},
+                {name: 'Stream 6', url: process.env.REACT_APP_SOURCE_6_URL} ];
 
     constructor(props) {
         super(props);
 
-        this.state = {portValue: this.props.data.streams, metric: this.metrics[0].name};
+        this.state = {
+            url: this.props.data.url,  
+            metric: this.metrics[0].name
+        };
 
         this.onClickExit = this.onClickExit.bind(this);
         this.onPortChange = this.onPortChange.bind(this);
@@ -40,7 +42,7 @@ class Monitor extends React.Component {
             <div className='Card'>
                 <div className='Exit' onClick={this.onClickExit}>x</div>
                 <div className='Card-Background'>
-                    <VideoPlayer port={this.props.data.port} />
+                    <VideoPlayer url={this.props.data.url} />
                     <div style={{flex: 3}}>
                         <MetricsGraph data={data} dataKey={this.state.metric} 
                         xAxisKey={'time'} lineColor={this.lineColor[this.state.metric]}/>
@@ -48,12 +50,12 @@ class Monitor extends React.Component {
                     <div style={{flex: 2, paddingLeft: '5%'}}>
                         <label>
                         Stream: 
-                            {/*<input type='text' value={this.state.portValue}
+                            {/*<input type='text' value={this.state.url}
                             onChange={this.handlePortChange} />
                             <button onClick={this.onPortChange}>Submit</ button>*/}
-                            <select value={this.state.portValue} onChange={this.handlePortChange}>
+                            <select value={this.state.url} onChange={this.handlePortChange}>
                             {this.streams.map((e, i) => 
-                                    <option value={e.port} key={i}>{e.name}</option>
+                                    <option value={e.url} key={i}>{e.name}</option>
                                 )
                             }
                             </ select>
@@ -83,7 +85,7 @@ class Monitor extends React.Component {
     }
 
     handlePortChange(event) {
-        this.setState({portValue: event.target.value});
+        this.setState({url: event.target.value});
         this.props.updateMonitorPortCallback(this.props.data.id, event.target.value);
     }
 

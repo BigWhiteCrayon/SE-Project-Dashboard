@@ -7,7 +7,7 @@ class VideoPlayer extends React.Component {
         return(
             <div className='Video-Window' >
                 <video className='Video' muted autoPlay loop
-                    src={`http://localhost:${this.props.port}/video`} type="video/mp4" 
+                    src={this.props.url} type="video/mp4" 
                 />    
             </div>
         );
