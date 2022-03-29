@@ -1,5 +1,4 @@
 import React from 'react';
-import VideoPlayer from './VideoPlayer';
 import MetricsGraph from './MetricsGraph';
 import './Monitor.css';
 
@@ -42,10 +41,11 @@ class Monitor extends React.Component {
             <div className='Card'>
                 <div className='Exit' onClick={this.onClickExit}>x</div>
                 <div className='Card-Background'>
-                    <VideoPlayer url={this.props.data.url} />
+                    {this.props.videoPlayer}
                     <div style={{flex: 3}}>
                         <MetricsGraph data={data} dataKey={this.state.metric} 
-                        xAxisKey={'time'} lineColor={this.lineColor[this.state.metric]}/>
+                        xAxisKey={'time'} lineColor={this.lineColor[this.state.metric]}
+                        socket={this.props.socket} url={this.state.url}/>
                     </ div>
                     <div style={{flex: 2, paddingLeft: '5%'}}>
                         <label>
@@ -85,8 +85,8 @@ class Monitor extends React.Component {
     }
 
     handlePortChange(event) {
+        this.props.updateMonitorPortCallback(this.props.data.id, event.target.value, this.state.url);
         this.setState({url: event.target.value});
-        this.props.updateMonitorPortCallback(this.props.data.id, event.target.value);
     }
 
     handleMetricChange(event) {
