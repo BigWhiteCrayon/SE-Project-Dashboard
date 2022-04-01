@@ -43,16 +43,13 @@ class Monitor extends React.Component {
                 <div className='Card-Background'>
                     {this.props.videoPlayer}
                     <div style={{flex: 3}}>
-                        <MetricsGraph data={data} dataKey={this.state.metric} 
-                        xAxisKey={'time'} lineColor={this.lineColor[this.state.metric]}
+                        <MetricsGraph data={data} metric={this.state.metric}  
+                        lineColor={this.lineColor[this.state.metric]}
                         socket={this.props.socket} url={this.state.url}/>
                     </ div>
                     <div style={{flex: 2, paddingLeft: '5%'}}>
                         <label>
                         Stream: 
-                            {/*<input type='text' value={this.state.url}
-                            onChange={this.handlePortChange} />
-                            <button onClick={this.onPortChange}>Submit</ button>*/}
                             <select value={this.state.url} onChange={this.handlePortChange}>
                             {this.streams.map((e, i) => 
                                     <option value={e.url} key={i}>{e.name}</option>

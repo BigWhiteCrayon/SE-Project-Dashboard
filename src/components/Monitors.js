@@ -1,8 +1,7 @@
 import React from 'react'
 import Monitor from './Monitor';
 import VideoPlayer from './VideoPlayer';
-
-import { io } from 'socket.io-client';
+import socketio from 'socket.io-client';
 
 class Monitors extends React.Component {
     constructor(props) {
@@ -21,9 +20,11 @@ class Monitors extends React.Component {
 
         this.activePorts.set(port, 1); 
 
-        this.socket = io(process.env.REACT_APP_MONITOR_URL); 
+        const socket = socketio.connect(process.env.REACT_APP_MONITOR_URL);
 
-        this.socket.send('start', port);
+        this.state = { socket: socket };
+
+        this.state.socket.emit('start', 8080);
 
         this.videoStreams = new Map();
         this.videoStreams.set(url, <VideoPlayer url = {url}/>)
@@ -38,10 +39,23 @@ class Monitors extends React.Component {
                 <Monitor data={e} key={i} 
                 deleteCallback={this.deleteMonitor}
                 updateMonitorPortCallback={this.updateMonitorPort}
-                socket={this.socket} 
+                socket={this.state.socket} 
                 videoPlayer = {this.videoStreams.get(e.url)}/>
             )
         );
+    }
+
+    componentDidMount() {
+        this.state.socket.on('connect', () => {
+            console.log('ws connected')
+            this.activePorts.forEach((_, key) => {
+                this.state.socket.emit('start', key);
+            })
+        });
+    }
+
+    componentWillUnmount() {
+        this.state.socket.close();
     }
     
     deleteMonitor(id) {
@@ -61,8 +75,9 @@ class Monitors extends React.Component {
         if(this.activePorts.get(oldPort) !== 1) {
             this.activePorts.set(oldPort, this.activePorts.get(oldPort) - 1);
         } else {
-            this.activePorts.delete(oldPort);
-            this.socket.send('stop', oldPort);
+            // Commented out until we add some kind of thread handling to the server
+            //this.activePorts.delete(oldPort);
+            //this.state.socket.emit('stop', oldPort);
 
             const oldUrl = `http://localhost:${oldPort}/video`
             this.videoStreams.set(oldUrl, <VideoPlayer url = {oldUrl}/>)
@@ -72,7 +87,7 @@ class Monitors extends React.Component {
             this.activePorts.set(newPort, this.activePorts.get(newPort) + 1);
         } else {
             this.activePorts.set(newPort, 1);
-            this.socket.send('start', newPort);
+            this.state.socket.emit('start', newPort);
 
             const newUrl = `http://localhost:${newPort}/video`
             this.videoStreams.set(newUrl, <VideoPlayer url = {newUrl}/>)

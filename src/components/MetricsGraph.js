@@ -1,59 +1,54 @@
-import React from 'react';
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
-import { Chart } from 'react-chartjs-2';
+import React, { useEffect, useState } from 'react';
+import { Chart as ChartJS, 
+    CategoryScale, 
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend, } from 'chart.js';
+import { Line } from 'react-chartjs-2';
 import './Monitor.css'
 
-class MetricsGraph extends React.Component {
-    constructor(props) {
-        super(props);
+ChartJS.register( 
+    CategoryScale, 
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
-        const data = {
-            labels: ['January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June'],
+function MetricsGraph (props) {
 
-            datasets: [{label: 'My First dataset',
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                data: [0, 10, 5, 2, 20, 30, 45],
-            }]
-        };
+    const [ metric,  ] = useState(props.metric );
+    const [ data,  ] = useState(props.data);
 
-        this.setState({metric: this.props.dataKey, data: data});
+    const [ socket,  ] = useState(props.socket);
+    
+    const port = /[0-9]{4}/.exec(props.url)[0];
 
-        this.port = /[0-9]{4}/.exec(this.props.url)[0];
-        
-        this.props.socket.on(this.port.toString(), (data) => {
+    useEffect(() => {
+        socket.on(port.toString(), (data) => {
             console.log(data);
         });
-    }
-    
-    render() {
-        return(
-            <div>
-            <ResponsiveContainer width='100%' aspect={16/9}>
-                <LineChart  data={this.props.data}>
-                    <Line stroke={this.props.lineColor} dataKey={this.props.dataKey} type='monotone' />
-                    <XAxis dataKey={this.props.xAxisKey} />
-                    <YAxis />
-                </ LineChart>
-            </ ResponsiveContainer>
-            </div>
-        );
-    }
+    })
 
-    /*render() {
-        return(
-            <div style={{flex: 3}}>
-            <Chart
-                type={'line'} data={this.state.data}
-            />
-            </div>
-        );
-    }*/
+    const dumbData = {
+        labels: data.map((e) => e.time),
+
+        datasets: [{label: metric,
+            backgroundColor: props.lineColor,
+            borderColor: props.lineColor,
+            data: data.map((e) => e[props.metric] ),
+        }]
+    };
+    return(
+        <Line options={{aspectRatio:16/9, plugins:{legend: {display:false}}}} width='100%'
+            data={dumbData}
+        />
+    );
 }
 
 
