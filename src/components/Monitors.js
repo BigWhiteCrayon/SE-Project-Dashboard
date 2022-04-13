@@ -9,6 +9,8 @@ class Monitors extends React.Component {
 
         this.deleteMonitor = this.deleteMonitor.bind(this);
         this.updateMonitorPort = this.updateMonitorPort.bind(this);
+        this.monitorDidMount = this.monitorDidMount.bind(this);
+        this.monitorWillUnmount = this.monitorWillUnmount.bind(this);
         
         this.activePorts = new Map();
 
@@ -18,13 +20,13 @@ class Monitors extends React.Component {
 
         console.log(port);
 
-        this.activePorts.set(port, 1); 
+        
 
         const socket = socketio.connect(process.env.REACT_APP_MONITOR_URL);
 
         this.state = { socket: socket };
 
-        this.state.socket.emit('start', 8080);
+        this.state.socket.emit('start', port);
 
         this.videoStreams = new Map();
         this.videoStreams.set(url, <VideoPlayer url = {url}/>)
@@ -39,6 +41,8 @@ class Monitors extends React.Component {
                 <Monitor data={e} key={i} 
                 deleteCallback={this.deleteMonitor}
                 updateMonitorPortCallback={this.updateMonitorPort}
+                onComponentDidMount={this.monitorDidMount}
+                onComponentWillUnmount={this.monitorWillUnmount}
                 socket={this.state.socket} 
                 videoPlayer = {this.videoStreams.get(e.url)}/>
             )
@@ -50,12 +54,42 @@ class Monitors extends React.Component {
             console.log('ws connected')
             this.activePorts.forEach((_, key) => {
                 this.state.socket.emit('start', key);
-            })
+            });
         });
     }
 
     componentWillUnmount() {
         this.state.socket.close();
+    }
+
+    monitorDidMount(url) {
+        const port = /[0-9]{4}/.exec(url)[0];
+
+        if(!this.activePorts.has(port)) {
+            this.activePorts.set(port, 1); 
+
+            console.log('starting: ' + port);
+            this.state.socket.emit('start', port);
+        } else {
+            this.activePorts.set(port, this.activePorts.get(port) + 1); 
+        }
+
+        console.log(this.activePorts);
+    }
+
+    monitorWillUnmount(url) {
+        const port = /[0-9]{4}/.exec(url)[0];
+
+        if(this.activePorts.get(port) <= 1) {
+            this.activePorts.delete(port);
+
+            console.log('stopping: ' + port);
+            this.state.socket.emit('stop', port);
+        } else {
+            this.activePorts.set(port, this.activePorts.get(port) - 1);
+        }
+
+        console.log(this.activePorts);
     }
     
     deleteMonitor(id) {
@@ -68,16 +102,14 @@ class Monitors extends React.Component {
         const newPort = /[0-9]{4}/.exec(newUrl)[0];
         const oldPort = /[0-9]{4}/.exec(oldUrl)[0];
 
-        console.log('old port: ' + oldPort.toString());
-        console.log('new port: ' + newPort.toString());
-
         
-        if(this.activePorts.get(oldPort) !== 1) {
+        if(this.activePorts.get(oldPort) > 1) {
             this.activePorts.set(oldPort, this.activePorts.get(oldPort) - 1);
         } else {
-            // Commented out until we add some kind of thread handling to the server
-            //this.activePorts.delete(oldPort);
-            //this.state.socket.emit('stop', oldPort);
+            this.activePorts.delete(oldPort);
+            this.state.socket.emit('stop', oldPort);
+
+            console.log('stopping: ' + oldPort);
 
             const oldUrl = `http://localhost:${oldPort}/video`
             this.videoStreams.set(oldUrl, <VideoPlayer url = {oldUrl}/>)
@@ -89,9 +121,13 @@ class Monitors extends React.Component {
             this.activePorts.set(newPort, 1);
             this.state.socket.emit('start', newPort);
 
+            console.log('starting: ' + newPort);
+
             const newUrl = `http://localhost:${newPort}/video`
             this.videoStreams.set(newUrl, <VideoPlayer url = {newUrl}/>)
         }
+
+        console.log(this.activePorts);
     }
 }
 
