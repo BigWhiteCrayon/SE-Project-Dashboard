@@ -34,16 +34,13 @@ class Monitor extends React.Component {
     }
 
     render() {
-        const data = [{name: 'a', packetSize: 65, dataTransferRate: 34, time: -20}, {name: 'b',packetSize:55, dataTransferRate: 36,time: -15}, 
-            {name: 'c', packetSize:56, dataTransferRate: 27, time: -10}, {name: 'd', packetSize: 67, dataTransferRate: 40, time: -5}, 
-            {name: 'e', packetSize: 60, dataTransferRate: 35,time: 0}];
         return (
             <div className='Card'>
                 <div className='Exit' onClick={this.onClickExit}>x</div>
                 <div className='Card-Background'>
                     {this.props.videoPlayer}
                     <div style={{flex: 3}}>
-                        <MetricsGraph data={data} metric={this.state.metric}  
+                        <MetricsGraph metric={this.state.metric}  
                         lineColor={this.lineColor[this.state.metric]}
                         socket={this.props.socket} url={this.state.url}/>
                     </ div>
@@ -71,6 +68,14 @@ class Monitor extends React.Component {
                 
             </div>
         );
+    }
+
+    componentDidMount() {
+        this.props.onComponentDidMount(this.state.url);
+    }
+
+    componentWillUnmount() {
+        this.props.onComponentWillUnmount(this.state.url); 
     }
 
     onClickExit() {
