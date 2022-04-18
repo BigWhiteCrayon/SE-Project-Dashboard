@@ -19,11 +19,6 @@ class Monitors extends React.Component {
         this.updateMonitorPort = this.updateMonitorPort.bind(this);
         this.monitorDidMount = this.monitorDidMount.bind(this);
         this.monitorWillUnmount = this.monitorWillUnmount.bind(this);
-<<<<<<< Updated upstream
-        
-=======
-
->>>>>>> Stashed changes
         this.activePorts = new Map();
 
         // TODO: Switch to handle starting with multiple dashboards
@@ -32,11 +27,6 @@ class Monitors extends React.Component {
 
         console.log(port);
 
-<<<<<<< Updated upstream
-        
-
-=======
->>>>>>> Stashed changes
         const socket = socketio.connect(process.env.REACT_APP_MONITOR_URL);
 
         this.state = { socket: socket };

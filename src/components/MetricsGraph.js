@@ -1,30 +1,18 @@
 import React from 'react';
-<<<<<<< Updated upstream
-import { Chart as ChartJS, 
-    CategoryScale, 
-=======
 import PropTypes from 'prop-types';
 import {
     Chart as ChartJS,
     CategoryScale,
->>>>>>> Stashed changes
     LinearScale,
     PointElement,
     LineElement,
     Title,
     Tooltip,
-<<<<<<< Updated upstream
-    Legend, } from 'chart.js';
-    
-import {Line} from 'react-chartjs-2'
-import './Monitor.css'
-=======
     Legend
 } from 'chart.js';
 
 import { Line } from 'react-chartjs-2';
 import './Monitor.css';
->>>>>>> Stashed changes
 
 ChartJS.register(
     CategoryScale,
