@@ -1,18 +1,17 @@
 import React from 'react';
 import PropType from 'prop-types';
 import MetricsGraph from './MetricsGraph';
-import VideoPlayer from './VideoPlayer';
 import { Socket } from 'socket.io-client';
 import './Monitor.css';
 
 class Monitor extends React.PureComponent {
     static propTypes = {
-        data: PropType.objectOf({
+        data: PropType.shape({
             url: PropType.string.isRequired,
             id: PropType.string.isRequired
         }).isRequired,
-        videoPlayer: PropType.objectOf(VideoPlayer).isRequired,
-        socket: PropType.objectOf(Socket).isRequired,
+        videoPlayer: PropType.element.isRequired,
+        socket: PropType.instanceOf(Socket).isRequired,
         onComponentDidMount: PropType.func.isRequired,
         onComponentWillUnmount: PropType.func.isRequired,
         deleteCallback: PropType.func.isRequired,

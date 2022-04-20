@@ -6,7 +6,13 @@ import socketio from 'socket.io-client';
 
 class Monitors extends React.Component {
     static propTypes = {
-        monitors: PropTypes.arrayOf(Monitor).isRequired,
+        monitors: PropTypes.arrayOf(
+            PropTypes.shape({
+                url: PropTypes.string.isRequired,
+                metric: PropTypes.string.isRequired,
+                id: PropTypes.string.isRequired
+            })
+        ).isRequired,
         deleteCallback: PropTypes.func.isRequired,
         updateMonitorPortCallback: PropTypes.func.isRequired
 
