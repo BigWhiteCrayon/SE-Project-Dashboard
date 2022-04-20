@@ -19,7 +19,7 @@ class App extends React.Component {
         this.state = {
             monitors: [{
                 url: process.env.REACT_APP_SOURCE_1_URL,
-                metric: 'packet-size',
+                metric: 'dataTransferRate',
                 id: id
             }]
         };
@@ -50,7 +50,7 @@ class App extends React.Component {
 
         this.state.monitors.push({
             url: process.env.REACT_APP_SOURCE_1_URL,
-            metric: 'packet-size',
+            metric: 'dataTransferRate',
             id: id
         });
         this.setState({ monitors: this.state.monitors });

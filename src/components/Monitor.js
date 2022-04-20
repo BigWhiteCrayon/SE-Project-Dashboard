@@ -8,7 +8,8 @@ class Monitor extends React.PureComponent {
     static propTypes = {
         data: PropType.shape({
             url: PropType.string.isRequired,
-            id: PropType.string.isRequired
+            id: PropType.string.isRequired,
+            metric: PropType.string.isRequired
         }).isRequired,
         videoPlayer: PropType.element.isRequired,
         socket: PropType.instanceOf(Socket).isRequired,
@@ -38,7 +39,7 @@ class Monitor extends React.PureComponent {
 
         this.state = {
             url: this.props.data.url,
-            metric: this.metrics[0].name
+            metric: this.props.data.metric
         };
 
         this.onClickExit = this.onClickExit.bind(this);
