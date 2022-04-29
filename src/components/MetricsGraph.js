@@ -51,8 +51,7 @@ class MetricsGraph extends React.PureComponent {
 
         const port = /[0-9]{4}/.exec(props.url)[0];
 
-        const callback = (wrongdata) => {
-            const data = { metrics: { dataTransferRate: wrongdata.metrics, packetsPerSecond: 0 } };
+        const callback = (data) => {
             if (this.state.data) {
                 // update this.dataArray
                 if (this.timeLabels.length >= 21) {
@@ -63,8 +62,8 @@ class MetricsGraph extends React.PureComponent {
                     this.timeLabels.unshift(this.timeLabels[0] - 1);
                 }
                 this.dataArray.push(data.metrics);
-                const newDataArray = this.dataArray.map((e) => e[props.metric]);
-
+                const newDataArray = this.dataArray.map((e) => e[this.state.metric ? this.state.metric : props.metric]);
+                console.log(newDataArray)
                 const formatedData = this.state.data.datasets;
                 formatedData[0].data = newDataArray;
                 this.setState({
@@ -101,11 +100,12 @@ class MetricsGraph extends React.PureComponent {
         }
 
         if (prevProps.metric !== this.props.metric) {
+            console.log(this.props.metric)
             const dumbData = {
                 labels: this.state.data.labels,
 
                 datasets: [{
-                    label: this.props.metric,
+                    label: this.timeLabels,
                     backgroundColor: this.props.lineColor,
                     borderColor: this.props.lineColor,
                     data: this.dataArray.map((e) => e[this.props.metric])
