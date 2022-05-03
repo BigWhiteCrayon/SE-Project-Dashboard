@@ -19,12 +19,12 @@ class Monitor extends React.PureComponent {
         updateMonitorPortCallback: PropType.func.isRequired
     };
 
-    metrics = [{ name: 'dataTransferRate', display: 'Data Tranfer Rate' },
-        { name: 'packetsPerSecond', display: 'Packets per Second' }];
+    metrics = [{ name: 'data_transfer_rate', display: 'Data Tranfer Rate' },
+        { name: 'packets_per_second', display: 'Packets per Second' }];
 
     lineColor = {
-        packetsPerSecond: 'aqua',
-        dataTransferRate: 'red'
+        packets_per_second: 'aqua',
+        data_transfer_rate: 'red'
     };
 
     streams = [{ name: 'Stream 1', url: process.env.REACT_APP_SOURCE_1_URL },
