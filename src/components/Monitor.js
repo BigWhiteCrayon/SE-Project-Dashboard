@@ -23,8 +23,8 @@ class Monitor extends React.PureComponent {
         { name: 'packets_per_second', display: 'Packets per Second' }];
 
     lineColor = {
-        packets_per_second: 'aqua',
-        data_transfer_rate: 'red'
+        packets_per_second: 'rgb(0, 151, 167)',
+        data_transfer_rate: 'rgb(255, 153, 0)'
     };
 
     streams = [{ name: 'Stream 1', url: process.env.REACT_APP_SOURCE_1_URL },
@@ -49,6 +49,7 @@ class Monitor extends React.PureComponent {
     }
 
     render () {
+        console.log(this.metrics[0].name)
         return (
             <div className='Card'>
                 <div className='Exit' onClick={this.onClickExit}>x</div>
@@ -56,6 +57,7 @@ class Monitor extends React.PureComponent {
                     {this.props.videoPlayer}
                     <div style={{ flex: 3 }}>
                         <MetricsGraph metric={this.state.metric}
+                            metric_name={this.state.metric == this.metrics[0].name ? 'Data Tranfer Rate' : 'Packets per Second'}
                             lineColor={this.lineColor[this.state.metric]}
                             socket={this.props.socket} url={this.state.url}/>
                     </ div>

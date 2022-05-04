@@ -27,6 +27,7 @@ ChartJS.register(
 class MetricsGraph extends React.PureComponent {
     static propTypes = {
         metric: PropTypes.string.isRequired,
+        metric_name: PropTypes.string.isRequired,
         lineColor: PropTypes.string.isRequired,
         url: PropTypes.string.isRequired,
         socket: PropTypes.object.isRequired
@@ -54,16 +55,20 @@ class MetricsGraph extends React.PureComponent {
         const callback = (data) => {
             if (this.state.data) {
                 // update this.dataArray
-                if (this.timeLabels.length >= 21) {
+                if (this.timeLabels.length >= 11) {
                     this.dataArray.shift();
                 } else if (this.timeLabels.length === 0) {
                     this.timeLabels.push(0);
                 } else { // data array is not fully sized yet
-                    this.timeLabels.unshift(this.timeLabels[0] - 1);
+                    this.timeLabels.unshift(this.timeLabels[0] - 2);
                 }
-                this.dataArray.push(data.metrics);
+
+                const correctedData = {
+                    data_transfer_rate: data.metrics.data_transfer_rate / 2,
+                    packets_per_second: data.metrics.packets_per_second / 2
+                }
+                this.dataArray.push(correctedData);
                 const newDataArray = this.dataArray.map((e) => e[this.state.metric ? this.state.metric : props.metric]);
-                console.log(newDataArray)
                 const formatedData = this.state.data.datasets;
                 formatedData[0].data = newDataArray;
                 this.setState({
@@ -121,7 +126,11 @@ class MetricsGraph extends React.PureComponent {
             <Line options={{
                 animation: { duration: 0 },
                 aspectRatio: 16 / 9,
-                plugins: { legend: { display: false } }
+                plugins: { title: {
+                        display: true,
+                        text: this.props.metric == 'data_transfer_rate' ? [this.props.metric_name, 'bytes/second'] : this.props.metric_name
+                    },
+                    legend: { display: false } }
             }}
             width='100%'
             data={this.state.data}
