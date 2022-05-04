@@ -4,20 +4,21 @@ module.exports = {
         es2021: true
     },
     extends: [
-        'plugin:react/recommended',
-        'standard'
+        'plugin:react/recommended'
     ],
     parserOptions: {
         ecmaFeatures: {
-            jsx: true
+            jsx: true,
+            modules: true
         },
         ecmaVersion: 'latest',
-        sourceType: 'module'
+        sourceType: 'module',
+        requireConfigFile: false
     },
     plugins: [
-        'react', ['babel']
+        'react', 'jsx'
     ],
-    parser: 'babel-eslint',
+    parser: '@babel/eslint-parser',
     rules: {
         indent: ['error', 4],
         semi: ['error', 'always']

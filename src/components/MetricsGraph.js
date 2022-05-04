@@ -66,7 +66,7 @@ class MetricsGraph extends React.PureComponent {
                 const correctedData = {
                     data_transfer_rate: data.metrics.data_transfer_rate / 2,
                     packets_per_second: data.metrics.packets_per_second / 2
-                }
+                };
                 this.dataArray.push(correctedData);
                 const newDataArray = this.dataArray.map((e) => e[this.state.metric ? this.state.metric : props.metric]);
                 const formatedData = this.state.data.datasets;
@@ -105,7 +105,6 @@ class MetricsGraph extends React.PureComponent {
         }
 
         if (prevProps.metric !== this.props.metric) {
-            console.log(this.props.metric)
             const dumbData = {
                 labels: this.state.data.labels,
 
@@ -127,10 +126,10 @@ class MetricsGraph extends React.PureComponent {
                 animation: { duration: 0 },
                 aspectRatio: 16 / 9,
                 plugins: { title: {
-                        display: true,
-                        text: this.props.metric == 'data_transfer_rate' ? [this.props.metric_name, 'bytes/second'] : this.props.metric_name
-                    },
-                    legend: { display: false } }
+                    display: true,
+                    text: this.props.metric == 'data_transfer_rate' ? [this.props.metric_name, 'bytes/second'] : this.props.metric_name
+                },
+                legend: { display: false } }
             }}
             width='100%'
             data={this.state.data}

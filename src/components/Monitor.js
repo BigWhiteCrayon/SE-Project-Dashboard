@@ -49,7 +49,6 @@ class Monitor extends React.PureComponent {
     }
 
     render () {
-        console.log(this.metrics[0].name)
         return (
             <div className='Card'>
                 <div className='Exit' onClick={this.onClickExit}>x</div>
