@@ -22,7 +22,7 @@
 .Add-Button-Plus{
   font-size: calc(24px + 0.5vw);
   text-align: center;
-  color: lightgray;
+  color: rgb(255, 153, 0);
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;

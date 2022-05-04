@@ -32,20 +32,22 @@
   .Exit{
     position: absolute;   
     font-size: calc(12px + 0.5vw);
-    margin-right: 3%;
+    margin-right: 1%;
     right:5px;
     top: 5px;
     text-align: center;
-    color: lightgray;
+    color: rgb(255, 153, 0);
     user-select: none;
   }
 
 .Video-Window{
   flex: 3;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
 }
 
 .Video{
   max-width:100%;
+  
 }
 
 .Line-Chart{

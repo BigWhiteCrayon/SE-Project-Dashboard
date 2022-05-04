@@ -129,7 +129,23 @@ class MetricsGraph extends React.PureComponent {
                     display: true,
                     text: this.props.metric == 'data_transfer_rate' ? [this.props.metric_name, 'bytes/second'] : this.props.metric_name
                 },
-                legend: { display: false } }
+                legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            drawTicks: false,
+                            drawBorder: false,
+                            z: -3
+                        }
+                    },
+                    y: {
+                        grid: {
+                            drawTicks: false,
+                            drawBorder: false,
+                            z: -3
+                        }
+                    }}
             }}
             width='100%'
             data={this.state.data}
